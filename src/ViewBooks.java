@@ -3,10 +3,7 @@ import Hive.BookDAO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.*;
 
 public class ViewBooks extends JFrame {
@@ -27,7 +24,7 @@ public class ViewBooks extends JFrame {
     private JLabel labelAuthor;
     private JLabel labelQuantity;
     private JButton btnClear;
-    private DefaultTableModel model;
+    private static DefaultTableModel model;
 
     ViewBooks(){
         setTitle("Books Available");
@@ -44,16 +41,7 @@ public class ViewBooks extends JFrame {
             ResultSet res = stmt.executeQuery("SELECT * FROM books");
             ResultSetMetaData rsmd = res.getMetaData();
 
-            model = (DefaultTableModel)bookTable.getModel(){
-                public boolean isCellEditable(int row, int column){
-                    return false;
-                }
-            };
-
-//            @Override
-//            bookTable.isCellEditable(int row, int column){
-//                return false;
-//            }
+            model = (DefaultTableModel)bookTable.getModel();
 
             int cols = rsmd.getColumnCount();
             cols++;
@@ -63,17 +51,8 @@ public class ViewBooks extends JFrame {
                 colnames[i]= rsmd.getColumnName(i);
             }
             model.setColumnIdentifiers(colnames);
-            String stdid,name,author,quantity;
-            int i=0;
-            while(res.next()){
-                i++;
-                stdid=res.getString(1);
-                name=res.getString(2);
-                author=res.getString(3);
-                quantity=res.getString(4);
-                String[] row = {i+"",stdid, name, author, quantity};
-                model.addRow(row);
-            }
+            printTable(res);
+
             b.Disconnect();
         }
         catch (Exception e){
@@ -91,14 +70,16 @@ public class ViewBooks extends JFrame {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                int bookid = Integer.parseInt(textId.getText());
-//                String name = textName.getText();
-//                String author = textAuthor.getText();
-//                int quantity = Integer.parseInt(textQuantity.getText());
-//                BookDAO b = new BookDAO();
-//                Connection conn = b.Connect();
-//                PreparedStatement pst = conn.prepareStatement("SELECT * FROM books WHERE bookid =?");
+
+                int bookid = Integer.parseInt(textId.getText());
+                String name = textName.getText();
+                String author = textAuthor.getText();
+                int quantity = Integer.parseInt(textQuantity.getText());
+                BookDAO b = new BookDAO();
+                Connection conn = b.Connect();
+
                 model.setRowCount(0);
+
             }
         });
 
@@ -124,6 +105,52 @@ public class ViewBooks extends JFrame {
                 textQuantity.setText(null);
             }
         });
+
+        KeyAdapter listener = new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                if(e.getSource()==textId){
+                    try {
+                        model.setRowCount(0);
+                        int id = Integer.parseInt(textId.getText());
+                        BookDAO b = new BookDAO();
+                        Connection conn = b.Connect();
+                        String query = "select * from books where cast(bookid as char) like '%?%';";
+                        PreparedStatement stmt = conn.prepareStatement(query);
+                        stmt.setInt(1,id);
+                        ResultSet res = stmt.executeQuery();
+                        printTable(res);
+                        b.Disconnect();
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        };
+        textId.addKeyListener(listener);
+        textQuantity.addKeyListener(listener);
+        textName.addKeyListener(listener);
+        textAuthor.addKeyListener(listener);
         setVisible(true);
+    }
+    public static void printTable(ResultSet res){
+        try{
+            String stdid,name,author,quantity;
+            int i=0;
+            while(res.next()){
+                i++;
+                stdid=res.getString(1);
+                name=res.getString(2);
+                author=res.getString(3);
+                quantity=res.getString(4);
+                String[] row = {i+"",stdid, name, author, quantity};
+                model.addRow(row);
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 }
