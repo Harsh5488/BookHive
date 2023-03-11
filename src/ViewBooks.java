@@ -2,28 +2,29 @@ import Hive.BookDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.regex.Pattern;
 
 public class ViewBooks extends JFrame {
     private JPanel bookView;
     private JTable bookTable;
-    private JButton btnSearch;
+    private JTextField textSearch;
     private JButton btnBack;
-    private JTextField textId;
-    private JTextField textName;
-    private JTextField textAuthor;
-    private JTextField textQuantity;
-    private JPanel panelID;
-    private JPanel panelName;
-    private JPanel panelAuthor;
-    private JPanel panelQuantity;
-    private JLabel labelID;
+    private JLabel labelId;
     private JLabel labelName;
     private JLabel labelAuthor;
     private JLabel labelQuantity;
-    private JButton btnClear;
+    private JLabel dLabelId;
+    private JLabel dLabelName;
+    private JLabel dLabelAuthor;
+    private JLabel dLabelQuantity;
+    private JButton btnReset;
+    private JPanel panelPreview;
+    private JPanel panelSearch;
+    private JPanel panelBtn;
     private static DefaultTableModel model;
 
     ViewBooks(){
@@ -52,7 +53,6 @@ public class ViewBooks extends JFrame {
             }
             model.setColumnIdentifiers(colnames);
             printTable(res);
-
             b.Disconnect();
         }
         catch (Exception e){
@@ -67,72 +67,38 @@ public class ViewBooks extends JFrame {
             }
         });
 
-        btnSearch.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                int bookid = Integer.parseInt(textId.getText());
-                String name = textName.getText();
-                String author = textAuthor.getText();
-                int quantity = Integer.parseInt(textQuantity.getText());
-                BookDAO b = new BookDAO();
-                Connection conn = b.Connect();
-
-                model.setRowCount(0);
-
-            }
-        });
-
         bookTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int i = bookTable.getSelectedRow();
                 DefaultTableModel model = (DefaultTableModel)bookTable.getModel();
-                textId.setText(model.getValueAt(i,1).toString());
-                textName.setText(model.getValueAt(i,2).toString());
-                textAuthor.setText(model.getValueAt(i,3).toString());
-                textQuantity.setText(model.getValueAt(i,4).toString());
+                dLabelId.setText(model.getValueAt(i,1).toString());
+                dLabelName.setText(model.getValueAt(i,2).toString());
+                dLabelAuthor.setText(model.getValueAt(i,3).toString());
+                dLabelQuantity.setText(model.getValueAt(i,4).toString());
             }
         });
 
-        btnClear.addActionListener(new ActionListener() {
+        btnReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textId.setText(null);
-                textName.setText(null);
-                textAuthor.setText(null);
-                textQuantity.setText(null);
+                dLabelId.setText(null);
+                dLabelName.setText(null);
+                dLabelAuthor.setText(null);
+                dLabelQuantity.setText(null);
+                textSearch.setText(null);
             }
         });
 
-        KeyAdapter listener = new KeyAdapter() {
+        textSearch.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-                if(e.getSource()==textId){
-                    try {
-                        model.setRowCount(0);
-                        int id = Integer.parseInt(textId.getText());
-                        BookDAO b = new BookDAO();
-                        Connection conn = b.Connect();
-                        String query = "select * from books where cast(bookid as char) like '%?%';";
-                        PreparedStatement stmt = conn.prepareStatement(query);
-                        stmt.setInt(1,id);
-                        ResultSet res = stmt.executeQuery();
-                        printTable(res);
-                        b.Disconnect();
-                    }
-                    catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-                }
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                String keyword = textSearch.getText();
+                search(keyword);
             }
-        };
-        textId.addKeyListener(listener);
-        textQuantity.addKeyListener(listener);
-        textName.addKeyListener(listener);
-        textAuthor.addKeyListener(listener);
+        });
         setVisible(true);
     }
     public static void printTable(ResultSet res){
@@ -152,5 +118,12 @@ public class ViewBooks extends JFrame {
         catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    public void search(String str){
+        model = (DefaultTableModel) bookTable.getModel();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        bookTable.setRowSorter(trs);
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + str));
     }
 }
