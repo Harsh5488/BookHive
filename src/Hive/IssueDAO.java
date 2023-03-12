@@ -3,7 +3,7 @@ package Hive;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class BookDAO {
+public class IssueDAO {
     private String url = "jdbc:mysql://localhost:3306/Hive";
     private String user = "root";
     private String pass = "Harsh@5488";
@@ -32,7 +32,6 @@ public class BookDAO {
     public void setPass(String pass) {
         this.pass = pass;
     }
-
     public Connection Connect(){
         try {
             conn = DriverManager.getConnection(url, user, pass);
@@ -51,5 +50,4 @@ public class BookDAO {
             e.printStackTrace();
         }
     }
-
 }

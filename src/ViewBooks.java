@@ -6,11 +6,10 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.util.regex.Pattern;
 
 public class ViewBooks extends JFrame {
     private JPanel bookView;
-    private JTable bookTable;
+    private JTable tableBooks;
     private JTextField textSearch;
     private JButton btnBack;
     private JLabel labelId;
@@ -25,6 +24,7 @@ public class ViewBooks extends JFrame {
     private JPanel panelPreview;
     private JPanel panelSearch;
     private JPanel panelBtn;
+    private JLabel labelSearch;
     private static DefaultTableModel model;
 
     ViewBooks(){
@@ -42,7 +42,7 @@ public class ViewBooks extends JFrame {
             ResultSet res = stmt.executeQuery("SELECT * FROM books");
             ResultSetMetaData rsmd = res.getMetaData();
 
-            model = (DefaultTableModel)bookTable.getModel();
+            model = (DefaultTableModel) tableBooks.getModel();
 
             int cols = rsmd.getColumnCount();
             cols++;
@@ -67,12 +67,12 @@ public class ViewBooks extends JFrame {
             }
         });
 
-        bookTable.addMouseListener(new MouseAdapter() {
+        tableBooks.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int i = bookTable.getSelectedRow();
-                DefaultTableModel model = (DefaultTableModel)bookTable.getModel();
+                int i = tableBooks.getSelectedRow();
+                DefaultTableModel model = (DefaultTableModel) tableBooks.getModel();
                 dLabelId.setText(model.getValueAt(i,1).toString());
                 dLabelName.setText(model.getValueAt(i,2).toString());
                 dLabelAuthor.setText(model.getValueAt(i,3).toString());
@@ -83,10 +83,10 @@ public class ViewBooks extends JFrame {
         btnReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dLabelId.setText(null);
-                dLabelName.setText(null);
-                dLabelAuthor.setText(null);
-                dLabelQuantity.setText(null);
+                dLabelId.setText("----");
+                dLabelName.setText("----");
+                dLabelAuthor.setText("----");
+                dLabelQuantity.setText("----");
                 textSearch.setText(null);
             }
         });
@@ -121,9 +121,9 @@ public class ViewBooks extends JFrame {
     }
 
     public void search(String str){
-        model = (DefaultTableModel) bookTable.getModel();
+        model = (DefaultTableModel) tableBooks.getModel();
         TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
-        bookTable.setRowSorter(trs);
+        tableBooks.setRowSorter(trs);
         trs.setRowFilter(RowFilter.regexFilter("(?i)" + str));
     }
 }

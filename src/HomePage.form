@@ -18,7 +18,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="7e73f" class="javax.swing.JButton" binding="ViewBooks">
+          <component id="7e73f" class="javax.swing.JButton" binding="btnViewBooks">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -26,15 +26,7 @@
               <text value="View All books"/>
             </properties>
           </component>
-          <component id="bd9f0" class="javax.swing.JButton" binding="updateBook">
-            <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Update Book"/>
-            </properties>
-          </component>
-          <component id="c84d9" class="javax.swing.JButton" binding="addBook">
+          <component id="c84d9" class="javax.swing.JButton" binding="btnaddBook">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -42,23 +34,7 @@
               <text value="Add Books"/>
             </properties>
           </component>
-          <component id="f89ed" class="javax.swing.JButton" binding="issueBook">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Issue Book"/>
-            </properties>
-          </component>
-          <component id="9cf2" class="javax.swing.JButton" binding="deleteBook">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Delete Book"/>
-            </properties>
-          </component>
-          <component id="e0c28" class="javax.swing.JButton" binding="exitbtn">
+          <component id="e0c28" class="javax.swing.JButton" binding="btnexit">
             <constraints>
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -73,13 +49,6 @@
               </grid>
             </constraints>
           </hspacer>
-          <hspacer id="96b3e">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="50" height="11"/>
-              </grid>
-            </constraints>
-          </hspacer>
           <hspacer id="c240d">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -87,6 +56,30 @@
               </grid>
             </constraints>
           </hspacer>
+          <component id="9cf2" class="javax.swing.JButton" binding="btnDelUpBook">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Update/Delete Book"/>
+            </properties>
+          </component>
+          <component id="ce86b" class="javax.swing.JButton" binding="btnViewIssuedBooks">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="View Issued Books"/>
+            </properties>
+          </component>
+          <component id="f89ed" class="javax.swing.JButton" binding="btnIssueBook">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Issue Book"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="ac76c" binding="footer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

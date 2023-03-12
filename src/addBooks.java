@@ -27,6 +27,8 @@ public class addBooks extends JFrame{
     private JLabel bookQuantity;
     private JLabel statusmsg;
     private JButton btnClear;
+    private JPanel panelTitle;
+    private JLabel labelTitle;
 
     addBooks(){
         setTitle("Add Books");
@@ -46,31 +48,40 @@ public class addBooks extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    int bookid = Integer.parseInt(textId.getText());
-                    String name = textName.getText();
-                    String author = textAuthor.getText();
-                    int quantity = Integer.parseInt(textQuantity.getText());
-                    BookDAO b = new BookDAO();
-                    Connection conn = b.Connect();
-                    PreparedStatement pst = conn.prepareStatement("INSERT INTO  books VALUES(?,?,?,?);");
-                    pst.setInt(1,bookid);
-                    pst.setString(2,name);
-                    pst.setString(3,author);
-                    pst.setInt(4,quantity);
-                    int count = pst.executeUpdate();
-                    statusmsg.setText(count + " row(s) affected - Book Added to Hive");
-                    textId.setText(null);
-                    textName.setText(null);
-                    textAuthor.setText(null);
-                    textQuantity.setText(null);
-                    b.Disconnect();
+                    if(
+                            textId.getText().equals("")
+                            || textName.getText().equals("")
+                            || textAuthor.getText().equals("")
+                            || textQuantity.getText().equals("")
+                    ){
+                        statusmsg.setText("Enter ALL the field before adding");
+                    }
+                    else {
+                        int bookid = Integer.parseInt(textId.getText());
+                        String name = textName.getText();
+                        String author = textAuthor.getText();
+                        int quantity = Integer.parseInt(textQuantity.getText());
+                        BookDAO b = new BookDAO();
+                        Connection conn = b.Connect();
+                        PreparedStatement pst = conn.prepareStatement("INSERT INTO  books VALUES(?,?,?,?);");
+                        pst.setInt(1, bookid);
+                        pst.setString(2, name);
+                        pst.setString(3, author);
+                        pst.setInt(4, quantity);
+                        int count = pst.executeUpdate();
+                        statusmsg.setText(count + " row(s) affected - Book Added to Hive");
+                        textId.setText(null);
+                        textName.setText(null);
+                        textAuthor.setText(null);
+                        textQuantity.setText(null);
+                        b.Disconnect();
+                    }
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
                 }
             }
         });
-        setVisible(true);
         btnClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,7 +89,9 @@ public class addBooks extends JFrame{
                 textName.setText(null);
                 textAuthor.setText(null);
                 textQuantity.setText(null);
+                statusmsg.setText("Fill the field and Hit \"Add Book\"");
             }
         });
+        setVisible(true);
     }
 }
