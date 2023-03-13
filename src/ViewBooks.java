@@ -88,6 +88,7 @@ public class ViewBooks extends JFrame {
                 dLabelAuthor.setText("----");
                 dLabelQuantity.setText("----");
                 textSearch.setText(null);
+                tableBooks.getSelectionModel().clearSelection();
             }
         });
 
