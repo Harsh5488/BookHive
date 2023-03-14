@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ViewBooks">
-  <grid id="27dc6" binding="bookView" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="bookView" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -33,11 +33,6 @@
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
-      <vspacer id="496c6">
-        <constraints>
-          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
       <vspacer id="d16a3">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
@@ -77,7 +72,7 @@
               </component>
             </children>
           </grid>
-          <grid id="b503c" binding="panelBtn" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="b503c" binding="panelBtn" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -93,12 +88,28 @@
                   <text value="Back"/>
                 </properties>
               </component>
-              <component id="e96cb" class="javax.swing.JButton" binding="btnReset">
+              <component id="e96cb" class="javax.swing.JButton" binding="btnRefresh">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Reset"/>
+                  <text value="Refresh"/>
+                </properties>
+              </component>
+              <component id="d60f3" class="javax.swing.JButton" binding="btnUpdate">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="2d1d4" class="javax.swing.JButton" binding="btnDelete">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Delete"/>
                 </properties>
               </component>
             </children>
@@ -145,7 +156,7 @@
                 </constraints>
                 <properties>
                   <font name="Courier New" size="12" style="0"/>
-                  <text value=" ----"/>
+                  <text value="----"/>
                 </properties>
               </component>
             </children>
@@ -173,7 +184,7 @@
                 </constraints>
                 <properties>
                   <font name="Courier New" size="12" style="0"/>
-                  <text value=" ----"/>
+                  <text value="----"/>
                 </properties>
               </component>
             </children>
@@ -201,7 +212,7 @@
                 </constraints>
                 <properties>
                   <font name="Courier New" size="12" style="0"/>
-                  <text value=" ----"/>
+                  <text value="----"/>
                 </properties>
               </component>
             </children>
@@ -229,7 +240,7 @@
                 </constraints>
                 <properties>
                   <font name="Courier New" size="12" style="0"/>
-                  <text value=" ----"/>
+                  <text value="----"/>
                 </properties>
               </component>
             </children>
@@ -239,6 +250,19 @@
       <vspacer id="66f93">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="1fd84" class="javax.swing.JLabel" binding="statusmsg">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Book Database"/>
+        </properties>
+      </component>
+      <vspacer id="496c6">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
     </children>

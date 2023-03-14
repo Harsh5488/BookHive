@@ -111,6 +111,7 @@ public class viewIssuedBooks extends JFrame {
                 dLabelDOI.setText("----");
                 dLabelDOS.setText("----");
                 textSearch.setText(null);
+                tableIssue.getSelectionModel().clearSelection();
             }
         });
         textSearch.addKeyListener(new KeyAdapter() {

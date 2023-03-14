@@ -1,4 +1,4 @@
-import Hive.BookDAO;
+import Hive.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +20,15 @@ public class ViewBooks extends JFrame {
     private JLabel dLabelName;
     private JLabel dLabelAuthor;
     private JLabel dLabelQuantity;
-    private JButton btnReset;
+    private JButton btnRefresh;
     private JPanel panelPreview;
     private JPanel panelSearch;
     private JPanel panelBtn;
     private JLabel labelSearch;
-    private static DefaultTableModel model;
+    private JButton btnUpdate;
+    private JButton btnDelete;
+    public JLabel statusmsg;
+    public static DefaultTableModel model;
 
     ViewBooks(){
         setTitle("Books Available");
@@ -80,7 +83,7 @@ public class ViewBooks extends JFrame {
             }
         });
 
-        btnReset.addActionListener(new ActionListener() {
+        btnRefresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dLabelId.setText("----");
@@ -89,6 +92,21 @@ public class ViewBooks extends JFrame {
                 dLabelQuantity.setText("----");
                 textSearch.setText(null);
                 tableBooks.getSelectionModel().clearSelection();
+
+                try{
+                    model.setRowCount(0);
+                    BookDAO ba = new BookDAO();
+                    Connection con = ba.Connect();
+                    Statement stmt = con.createStatement();
+
+                    ResultSet res = stmt.executeQuery("SELECT * FROM books");
+                    ViewBooks.printTable(res);
+                    stmt.close();
+                    ba.Disconnect();
+                }
+                catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -100,7 +118,73 @@ public class ViewBooks extends JFrame {
                 search(keyword);
             }
         });
+
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(dLabelId.getText().equals("----")){
+                    statusmsg.setText("Select an entry before updating");
+                }
+                else if(updateDialog.one_count>=1){
+                    statusmsg.setText("Execute or cancel the previous update window");
+                }
+                else{
+                    try {
+                        Book b = new Book();
+                        b.setBookid(Integer.parseInt(dLabelId.getText()));
+                        b.setBname(dLabelName.getText());
+                        b.setAuthor(dLabelAuthor.getText());
+                        b.setQuantity(Integer.parseInt(dLabelQuantity.getText()));
+                        updateDialog u = new updateDialog(b);
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+        MouseAdapter listener = new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                statusmsg.setText("Book Database");
+            }
+        };
+        btnBack.addMouseListener(listener);
+        btnRefresh.addMouseListener(listener);
+        btnUpdate.addMouseListener(listener);
+        btnDelete.addMouseListener(listener);
+
+        btnRefresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                statusmsg.setText("Refresh the fields");
+            }
+        });
+        btnBack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                statusmsg.setText("Go back to Home Page");
+            }
+        });
+        btnUpdate.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                statusmsg.setText("Update the selected Record");
+            }
+        });
+        btnDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                statusmsg.setText("Delete the Selected Record");
+            }
+        });
         setVisible(true);
+        
     }
     public static void printTable(ResultSet res){
         try{
