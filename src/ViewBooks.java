@@ -183,8 +183,91 @@ public class ViewBooks extends JFrame {
                 statusmsg.setText("Delete the Selected Record");
             }
         });
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(dLabelId.getText().equals("----")){
+                    statusmsg.setText("Select an entry before Deleting");
+                }
+                else{
+                    try{
+                        String bname = dLabelName.getText();
+                        String query1 = "SELECT * FROM issue WHERE Book_Name=? ;";
+                        IssueDAO ib = new IssueDAO();
+                        Connection conn = ib.Connect();
+                        PreparedStatement pst = conn.prepareStatement(query1);
+                        pst.setString(1,bname);
+                        ResultSet res = pst.executeQuery();
+
+                        if(res.next()){
+                            boolean flag = false;
+                            do{
+                                if(res.getString(6).equals("Pending")){
+                                    flag = true;
+                                    statusmsg.setText("Book Cannot be deleted. It is currently issued to some reader(s)");
+                                    break;
+                                }
+                            }while(res.next());
+                            if(!flag){
+                                int ans = JOptionPane.showOptionDialog(bookView,"Are you sure to Delete this Book?","Confirm Deletion",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Yes, Do it","No, Don't"},1);
+                                //fire query for deletion
+                                String query2 = "DELETE FROM books WHERE  name=?;";
+                                BookDAO bd = new BookDAO();
+                                Connection conn1 = bd.Connect();
+                                PreparedStatement pst1 = conn1.prepareStatement(query2);
+                                pst1.setString(1,bname);
+                                int count = pst1.executeUpdate();
+                                statusmsg.setText(count+" row(s) affected. Book deleted from Hive.");
+                                pst1.close();
+                                bd.Disconnect();
+                                model.setRowCount(0);
+                                BookDAO ba = new BookDAO();
+                                Connection con = ba.Connect();
+                                Statement stmt = con.createStatement();
+
+                                ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
+                                printTable(res1);
+                                stmt.close();
+                                ba.Disconnect();
+                            }
+                            else{
+                                statusmsg.setText("Book Cannot be deleted. It is currently issued to some reader(s)");
+                            }
+                        }
+                        else{
+                            int ans = JOptionPane.showOptionDialog(bookView,"Are you sure to Delete this Book?","Confirm Deletion",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Yes, Do it","No, Don't"},1);
+                            //fire query for deletion
+                            String query2 = "DELETE FROM books WHERE  name=?;";
+                            BookDAO bd = new BookDAO();
+                            Connection conn1 = bd.Connect();
+                            PreparedStatement pst1 = conn1.prepareStatement(query2);
+                            pst1.setString(1,bname);
+                            int count = pst1.executeUpdate();
+                            statusmsg.setText(count+" row(s) affected. Book deleted from Hive.");
+                            pst1.close();
+                            bd.Disconnect();
+                            model.setRowCount(0);
+                            BookDAO ba = new BookDAO();
+                            Connection con = ba.Connect();
+                            Statement stmt = con.createStatement();
+
+                            ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
+                            ViewBooks.printTable(res1);
+                            stmt.close();
+                            ba.Disconnect();
+                        }
+
+                        pst.close();
+                        ib.Disconnect();
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
         setVisible(true);
-        
     }
     public static void printTable(ResultSet res){
         try{
