@@ -31,6 +31,7 @@ public class UpdateDialog extends JDialog {
         setMinimumSize(new Dimension(400,200));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
         one_count++;
 
         textBId.setText(""+b.getBookid());

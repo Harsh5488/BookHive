@@ -24,6 +24,7 @@ public class LoginForm extends JFrame {
         setMinimumSize(new Dimension(600,400));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         setLogin();
         usertext.setText(username);

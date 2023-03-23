@@ -36,6 +36,7 @@ public class UpdateLogin extends JFrame{
         setMinimumSize(new Dimension(600,400));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
         btnBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){

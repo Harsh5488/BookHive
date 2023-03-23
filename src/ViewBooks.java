@@ -36,6 +36,7 @@ public class ViewBooks extends JFrame {
         setMinimumSize(new Dimension(600,400));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         try{
             BookDAO b = new BookDAO();
@@ -211,24 +212,29 @@ public class ViewBooks extends JFrame {
                             if(!flag){
                                 int ans = JOptionPane.showOptionDialog(bookView,"Are you sure to Delete this Book?","Confirm Deletion",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Yes, Do it","No, Don't"},1);
                                 //fire query for deletion
-                                String query2 = "DELETE FROM books WHERE  name=?;";
-                                BookDAO bd = new BookDAO();
-                                Connection conn1 = bd.Connect();
-                                PreparedStatement pst1 = conn1.prepareStatement(query2);
-                                pst1.setString(1,bname);
-                                int count = pst1.executeUpdate();
-                                statusmsg.setText(count+" row(s) affected. Book deleted from Hive.");
-                                pst1.close();
-                                bd.Disconnect();
-                                model.setRowCount(0);
-                                BookDAO ba = new BookDAO();
-                                Connection con = ba.Connect();
-                                Statement stmt = con.createStatement();
+                                if(ans==JOptionPane.YES_OPTION){
+                                    String query2 = "DELETE FROM books WHERE  name=?;";
+                                    BookDAO bd = new BookDAO();
+                                    Connection conn1 = bd.Connect();
+                                    PreparedStatement pst1 = conn1.prepareStatement(query2);
+                                    pst1.setString(1, bname);
+                                    int count = pst1.executeUpdate();
+                                    statusmsg.setText(count + " row(s) affected. Book deleted from Hive.");
+                                    pst1.close();
+                                    bd.Disconnect();
+                                    model.setRowCount(0);
+                                    BookDAO ba = new BookDAO();
+                                    Connection con = ba.Connect();
+                                    Statement stmt = con.createStatement();
 
-                                ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
-                                printTable(res1);
-                                stmt.close();
-                                ba.Disconnect();
+                                    ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
+                                    printTable(res1);
+                                    stmt.close();
+                                    ba.Disconnect();
+                                }
+                                else{
+                                    statusmsg.setText("Deletion Canceled");
+                                }
                             }
                             else{
                                 statusmsg.setText("Book Cannot be deleted. It is currently issued to some reader(s)");
@@ -237,24 +243,29 @@ public class ViewBooks extends JFrame {
                         else{
                             int ans = JOptionPane.showOptionDialog(bookView,"Are you sure to Delete this Book?","Confirm Deletion",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Yes, Do it","No, Don't"},1);
                             //fire query for deletion
-                            String query2 = "DELETE FROM books WHERE  name=?;";
-                            BookDAO bd = new BookDAO();
-                            Connection conn1 = bd.Connect();
-                            PreparedStatement pst1 = conn1.prepareStatement(query2);
-                            pst1.setString(1,bname);
-                            int count = pst1.executeUpdate();
-                            statusmsg.setText(count+" row(s) affected. Book deleted from Hive.");
-                            pst1.close();
-                            bd.Disconnect();
-                            model.setRowCount(0);
-                            BookDAO ba = new BookDAO();
-                            Connection con = ba.Connect();
-                            Statement stmt = con.createStatement();
+                            if(ans==JOptionPane.YES_OPTION){
+                                String query2 = "DELETE FROM books WHERE  name=?;";
+                                BookDAO bd = new BookDAO();
+                                Connection conn1 = bd.Connect();
+                                PreparedStatement pst1 = conn1.prepareStatement(query2);
+                                pst1.setString(1, bname);
+                                int count = pst1.executeUpdate();
+                                statusmsg.setText(count + " row(s) affected. Book deleted from Hive.");
+                                pst1.close();
+                                bd.Disconnect();
+                                model.setRowCount(0);
+                                BookDAO ba = new BookDAO();
+                                Connection con = ba.Connect();
+                                Statement stmt = con.createStatement();
 
-                            ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
-                            ViewBooks.printTable(res1);
-                            stmt.close();
-                            ba.Disconnect();
+                                ResultSet res1 = stmt.executeQuery("SELECT * FROM books");
+                                ViewBooks.printTable(res1);
+                                stmt.close();
+                                ba.Disconnect();
+                            }
+                            else{
+                                statusmsg.setText("Deletion Canceled");
+                            }
                         }
 
                         pst.close();

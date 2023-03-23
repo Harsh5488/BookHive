@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class LoginDAO {
-    private String url = "jdbc:mysql://localhost:3306/Hive";
-    private String user = "root";
-    private String pass = "Harsh@5488";
+    private String url = DBCredentials.url;
+    private String user = DBCredentials.user;
+    private String pass = DBCredentials.pass;
     Connection conn;
 
     public String getUrl() {

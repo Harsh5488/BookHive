@@ -36,6 +36,7 @@ public class AddBooks extends JFrame{
         setMinimumSize(new Dimension(600,400));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         backButton.addActionListener(new ActionListener() {
             @Override
