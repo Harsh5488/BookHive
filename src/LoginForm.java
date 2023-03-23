@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class LoginForm extends JFrame {
     private JPasswordField passwordtext;
@@ -11,6 +14,8 @@ public class LoginForm extends JFrame {
     private JButton btnsubmit;
     private JPanel LoginPanel;
     private JLabel statusmsg;
+    private String username = "";
+    private String password = "";
 
     public LoginForm(){
 //        super(parent);
@@ -20,6 +25,9 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        setLogin();
+        usertext.setText(username);
+        passwordtext.setText(password);
         btnsubmit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,14 +45,28 @@ public class LoginForm extends JFrame {
         });
         setVisible(true);
     }
-    private boolean getAuthorization(String username, String password){
-//        BookDAO bd = new BookDAO();
-        return true;
-//        if(username.equals(bd.getUser()) && password.equals(bd.getPass())){
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
+    private boolean getAuthorization(String name, String pass){
+        setLogin();
+        if(username.equals(name) && password.equals(pass)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    private void setLogin(){
+        try{
+            LoginDAO l = new LoginDAO();
+            Connection con = l.Connect();
+            String query = "SELECT * FROM login;";
+            Statement stmt = con.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            res.next();
+            username = res.getString(1);
+            password = res.getString(2);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

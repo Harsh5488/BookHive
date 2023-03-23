@@ -9,7 +9,7 @@ public class HomePage extends JFrame {
     private JPanel footer;
     private JButton btnViewBooks;
     private JButton btnaddBook;
-    private JButton btnDelUpBook;
+    private JButton btnUpLogin;
     private JButton btnIssueBook;
     private JButton btnexit;
     private JButton btnViewIssuedBooks;
@@ -32,7 +32,7 @@ public class HomePage extends JFrame {
         btnaddBook.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addBooks ab = new addBooks();
+                AddBooks ab = new AddBooks();
                 dispose();
             }
         });
@@ -56,7 +56,7 @@ public class HomePage extends JFrame {
         btnaddBook.addMouseListener(listener);
         btnexit.addMouseListener(listener);
         btnIssueBook.addMouseListener(listener);
-        btnDelUpBook.addMouseListener(listener);
+        btnUpLogin.addMouseListener(listener);
         btnViewIssuedBooks.addMouseListener(listener);
 
         btnViewBooks.addMouseListener(new MouseAdapter() {
@@ -80,11 +80,11 @@ public class HomePage extends JFrame {
                 statusmsg.setText("Issue Books to the reader");
             }
         });
-        btnDelUpBook.addMouseListener(new MouseAdapter() {
+        btnUpLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                statusmsg.setText("Update or delete a Book from the hive");
+                statusmsg.setText("Update Login Credentials");
             }
         });
         btnexit.addMouseListener(new MouseAdapter() {
@@ -104,11 +104,10 @@ public class HomePage extends JFrame {
         btnViewIssuedBooks.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewIssuedBooks vib = new viewIssuedBooks();
+                ViewIssuedBooks vib = new ViewIssuedBooks();
                 dispose();
             }
         });
-        setVisible(true);
         btnIssueBook.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,5 +115,13 @@ public class HomePage extends JFrame {
                 dispose();
             }
         });
+        btnUpLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UpdateLogin u = new UpdateLogin();
+                dispose();
+            }
+        });
+        setVisible(true);
     }
 }

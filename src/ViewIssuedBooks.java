@@ -1,3 +1,4 @@
+import Hive.BookDAO;
 import Hive.IssueDAO;
 
 import javax.swing.*;
@@ -5,12 +6,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 
-public class viewIssuedBooks extends JFrame {
+public class ViewIssuedBooks extends JFrame {
     private JPanel content;
     private JPanel panelDBContent;
     private JTable tableIssue;
@@ -42,8 +41,9 @@ public class viewIssuedBooks extends JFrame {
     private JButton btnSubmit;
     private JLabel labelSearch;
     private static DefaultTableModel model;
+    TableRowSorter<DefaultTableModel> trs;
 
-    viewIssuedBooks(){
+    ViewIssuedBooks(){
         setTitle("Issued Books Data");
         setContentPane(content);
         setMinimumSize(new Dimension(600,400));
@@ -79,19 +79,39 @@ public class viewIssuedBooks extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int i = tableIssue.getSelectedRow();
-                DefaultTableModel model = (DefaultTableModel) tableIssue.getModel();
-                dLabelRId.setText(model.getValueAt(i,1).toString());
-                dLabelRName.setText(model.getValueAt(i,2).toString());
-                dLabelBName.setText(model.getValueAt(i,3).toString());
-                dLabelDOI.setText(model.getValueAt(i,4).toString());
-                if(model.getValueAt(i,5)==null){
-                    dLabelDOS.setText("----");
+                if (textSearch.getText().equals("")) {
+                    //nhi hua
+                    int i = tableIssue.getSelectedRow();
+                    dLabelRId.setText(model.getValueAt(i, 1).toString());
+                    dLabelRName.setText(model.getValueAt(i, 2).toString());
+                    dLabelBName.setText(model.getValueAt(i, 3).toString());
+                    dLabelDOI.setText(model.getValueAt(i, 4).toString());
+                    if (model.getValueAt(i, 5) == null) {
+                        dLabelDOS.setText("----");
+                    } else {
+                        dLabelDOS.setText(model.getValueAt(i, 5).toString());
+                    }
+                    dLabelStatus.setText(model.getValueAt(i, 6).toString());
                 }
-                else{
-                    dLabelDOS.setText(model.getValueAt(i,5).toString());
+                else {
+                    //hua h
+                    model = (DefaultTableModel) tableIssue.getModel();
+                    trs = new TableRowSorter<>(model);
+                    tableIssue.setRowSorter(trs);
+                    trs.setRowFilter(RowFilter.regexFilter("(?i)" + textSearch.getText()));
+                    model = (DefaultTableModel) tableIssue.getModel();
+                    int i = tableIssue.getSelectedRow()+1;
+                    dLabelRId.setText(model.getValueAt(i, 1).toString());
+                    dLabelRName.setText(model.getValueAt(i, 2).toString());
+                    dLabelBName.setText(model.getValueAt(i, 3).toString());
+                    dLabelDOI.setText(model.getValueAt(i, 4).toString());
+                    if (model.getValueAt(i, 5) == null) {
+                        dLabelDOS.setText("----");
+                    } else {
+                        dLabelDOS.setText(model.getValueAt(i, 5).toString());
+                    }
+                    dLabelStatus.setText(model.getValueAt(i, 6).toString());
                 }
-                dLabelStatus.setText(model.getValueAt(i,6).toString());
             }
         });
         btnBack.addActionListener(new ActionListener() {
@@ -129,7 +149,53 @@ public class viewIssuedBooks extends JFrame {
                     statusmsg.setText("Select a book for submission");
                 }
                 else{
-                    System.out.println("hello world");
+                    try{
+
+                        int ans = JOptionPane.showOptionDialog(content,"Are you sure to Submit this Book?","Confirm Submission",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Yes","No"},0);
+                        if(ans==0){
+                            LocalDate date = LocalDate.now();
+                            IssueDAO ib = new IssueDAO();
+                            Connection conn = ib.Connect();
+                            String query = "UPDATE issue SET status=?, dos=? WHERE book_name=? AND reader_id=?;";
+                            PreparedStatement pst = conn.prepareStatement(query);
+                            pst.setString(1,"Submitted");
+                            pst.setString(2,date.toString());
+                            pst.setString(3, dLabelBName.getText());
+                            pst.setString(4, dLabelRId.getText());
+                            int count = pst.executeUpdate();
+
+                            BookDAO bd = new BookDAO();
+                            Connection conn1 = bd.Connect();
+                            PreparedStatement pst2 = conn1.prepareStatement("UPDATE books SET Quantity=Quantity+1 WHERE name=?;");
+                            pst2.setString(1,dLabelBName.getText());
+                            pst2.executeUpdate();
+
+                            statusmsg.setText(count + " row(s) affected - Book Submitted to Hive");
+
+                            pst.close();
+                            ib.Disconnect();
+
+                            pst2.close();
+                            bd.Disconnect();
+
+                            ViewIssuedBooks.model.setRowCount(0);
+                            IssueDAO ba = new IssueDAO();
+                            Connection con = ba.Connect();
+                            Statement stmt = con.createStatement();
+
+                            ResultSet res = stmt.executeQuery("SELECT * FROM issue");
+                            ViewIssuedBooks.printTable(res);
+                            stmt.close();
+                            ba.Disconnect();
+
+                        }
+                        else{
+                            statusmsg.setText("Submission Canceled");
+                        }
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -188,8 +254,9 @@ public class viewIssuedBooks extends JFrame {
     }
     public void search(String str){
         model = (DefaultTableModel) tableIssue.getModel();
-        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        trs = new TableRowSorter<>(model);
         tableIssue.setRowSorter(trs);
         trs.setRowFilter(RowFilter.regexFilter("(?i)" + str));
+
     }
 }

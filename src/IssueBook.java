@@ -33,6 +33,7 @@ public class IssueBook extends JFrame {
     private JLabel labelRId;
     private JTextField textRId;
     private JPanel panelRId;
+    private JCheckBox cbToday;
 
     IssueBook(){
         setTitle("Issue Books");
@@ -41,6 +42,8 @@ public class IssueBook extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        cbToday.setSelected(true);
+        textDOI.setEditable(false);
         LocalDate date = LocalDate.now();
 
         textDOI.setText(date.toString());
@@ -139,5 +142,16 @@ public class IssueBook extends JFrame {
             }
         });
         setVisible(true);
+        cbToday.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cbToday.isSelected()){
+                    textDOI.setEditable(false);
+                }
+                else{
+                    textDOI.setEditable(true);
+                }
+            }
+        });
     }
 }

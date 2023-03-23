@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class addBooks extends JFrame{
+public class AddBooks extends JFrame{
     private JTextField textId;
     private JTextField textName;
     private JTextField textAuthor;
@@ -30,7 +30,7 @@ public class addBooks extends JFrame{
     private JPanel panelTitle;
     private JLabel labelTitle;
 
-    addBooks(){
+    AddBooks(){
         setTitle("Add Books");
         setContentPane(add);
         setMinimumSize(new Dimension(600,400));

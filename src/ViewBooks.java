@@ -125,7 +125,7 @@ public class ViewBooks extends JFrame {
                 if(dLabelId.getText().equals("----")){
                     statusmsg.setText("Select an entry before updating");
                 }
-                else if(updateDialog.one_count>=1){
+                else if(UpdateDialog.one_count>=1){
                     statusmsg.setText("Execute or cancel the previous update window");
                 }
                 else{
@@ -135,7 +135,7 @@ public class ViewBooks extends JFrame {
                         b.setBname(dLabelName.getText());
                         b.setAuthor(dLabelAuthor.getText());
                         b.setQuantity(Integer.parseInt(dLabelQuantity.getText()));
-                        updateDialog u = new updateDialog(b);
+                        UpdateDialog u = new UpdateDialog(b);
                     }
                     catch (Exception ex){
                         ex.printStackTrace();

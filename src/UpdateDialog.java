@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class updateDialog extends JDialog {
+public class UpdateDialog extends JDialog {
 
     private JButton btnUpdate;
     private JButton btnCancel;
@@ -25,7 +25,7 @@ public class updateDialog extends JDialog {
     private JLabel statusmsg;
     public static int one_count=0;
 
-    updateDialog(Book b){
+    UpdateDialog(Book b){
         setTitle("Update Books");
         setContentPane(panelUpdate);
         setMinimumSize(new Dimension(400,200));
@@ -80,6 +80,7 @@ public class updateDialog extends JDialog {
                         ViewBooks.printTable(res);
                         stmt.close();
                         ba.Disconnect();
+
                         pst.close();
                         bk.Disconnect();
                         dispose();
